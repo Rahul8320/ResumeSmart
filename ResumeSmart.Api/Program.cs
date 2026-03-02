@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using ResumeSmart.Api.Configs;
 using ResumeSmart.Api.DB;
-using ResumeSmart.Api.Models;
 using ResumeSmart.Api.Services;
 using ResumeSmart.Api.Services.Interfaces;
 
@@ -34,24 +32,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-
-app.MapGet("/users", async (IUserService service) =>
-{
-    var users = await service.GetAllUsers();
-    return Results.Ok(users);
-});
-
-app.MapPost("/users", async ([FromBody] CreateUserRequest request, IUserService service) =>
-{
-    try
-    {
-        await service.CreateUser(request);
-        return Results.Created($"/users", null);
-    }
-    catch (Exception e)
-    {   
-        return Results.InternalServerError(e.Message);
-    }
-});
 
 app.Run();

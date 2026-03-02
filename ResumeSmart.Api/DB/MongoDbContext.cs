@@ -4,10 +4,21 @@ using ResumeSmart.Api.DB.Entities;
 
 namespace ResumeSmart.Api.DB;
 
+/// <summary>
+/// Initialize a mongo db context 
+/// </summary>
+/// <param name="database">Mongo database instance</param>
+/// <param name="logger">Logger instance</param>
 public class MongoDbContext(IMongoDatabase database, ILogger<MongoDbContext> logger)
 {
+    /// <summary>
+    /// Holds users collection 
+    /// </summary>
     public IMongoCollection<Users> Users => database.GetCollection<Users>(DbConstents.UserCollection);
     
+    /// <summary>
+    /// Creates required indexes in database
+    /// </summary>
     public void EnsureIndexes()
     {
         var userCollection = database.GetCollection<Users>(DbConstents.UserCollection);
