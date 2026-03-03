@@ -3,8 +3,12 @@ using ResumeSmart.Api.Configs;
 using ResumeSmart.Api.DB;
 using ResumeSmart.Api.Services;
 using ResumeSmart.Api.Services.Interfaces;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) => 
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 builder.Services.AddSingleton<IMongoDatabase>(_ =>
@@ -14,7 +18,6 @@ builder.Services.AddSingleton<IMongoDatabase>(_ =>
 });
 
 builder.Services.AddSingleton<MongoDbContext>();
-
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
@@ -30,6 +33,8 @@ if (app.Environment.IsDevelopment())
     var dbContext = app.Services.GetService<MongoDbContext>();
     dbContext?.EnsureIndexes();
 }
+
+app.UseSerilogRequestLogging();
 
 app.MapControllers();
 
