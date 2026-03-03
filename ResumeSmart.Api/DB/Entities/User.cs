@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ResumeSmart.Api.DB.Entities;
 
-public class Users
+public class User
 {
     [BsonId]
     public ObjectId Id { get; set; }

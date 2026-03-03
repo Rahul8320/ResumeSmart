@@ -14,18 +14,18 @@ public class MongoDbContext(IMongoDatabase database, ILogger<MongoDbContext> log
     /// <summary>
     /// Holds users collection 
     /// </summary>
-    public IMongoCollection<Users> Users => database.GetCollection<Users>(DbConstents.UserCollection);
+    public IMongoCollection<User> Users => database.GetCollection<User>(DbConstents.UserCollection);
     
     /// <summary>
     /// Creates required indexes in database
     /// </summary>
     public void EnsureIndexes()
     {
-        var userCollection = database.GetCollection<Users>(DbConstents.UserCollection);
+        var userCollection = database.GetCollection<User>(DbConstents.UserCollection);
 
-        var indexKeys = Builders<Users>.IndexKeys.Ascending(user => user.Email);
+        var indexKeys = Builders<User>.IndexKeys.Ascending(user => user.Email);
         var indexOptions = new CreateIndexOptions { Unique = true };
-        var indexModel = new CreateIndexModel<Users>(indexKeys, indexOptions);
+        var indexModel = new CreateIndexModel<User>(indexKeys, indexOptions);
 
         try
         {
