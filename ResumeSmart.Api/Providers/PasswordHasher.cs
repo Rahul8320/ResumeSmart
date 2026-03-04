@@ -6,7 +6,7 @@ namespace ResumeSmart.Api.Providers;
 /// <summary>
 /// Implementation of IPasswordHasher interface using BCrypt 
 /// </summary>
-public class PasswordHasher : IPasswordHasher
+public sealed class PasswordHasher : IPasswordHasher
 {
     /// <summary>
     /// Hash plain text password with salt using BCrypter

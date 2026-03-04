@@ -4,6 +4,7 @@ using ResumeSmart.Api.DB.Entities;
 using ResumeSmart.Api.Models;
 using ResumeSmart.Api.Models.Requests;
 using ResumeSmart.Api.Models.Responses;
+using ResumeSmart.Api.Providers.Interfaces;
 using ResumeSmart.Api.Services.Interfaces;
 
 namespace ResumeSmart.Api.Services;
@@ -13,9 +14,10 @@ namespace ResumeSmart.Api.Services;
 /// </summary>
 /// <param name="dbContext">Mongo db context</param>
 /// <param name="logger">Logger</param>
-public class AuthService(
+public sealed class AuthService(
     MongoDbContext dbContext,
     IPasswordHasher passwordHasher,
+    ITokenProvider tokenProvider,
     ILogger<AuthService> logger) : IAuthService
 {
     /// <summary>
@@ -37,7 +39,9 @@ public class AuthService(
         var user = await CreateNewUser(request);
         logger.LogInformation("User with email {email} registered", user.Email);
 
-        return AuthResponses.UserRegister(user.ToUserResponse(), "Token");
+        var accessToken = tokenProvider.GenerateAccessToken(user.ToUserResponse());
+
+        return AuthResponses.UserRegister(user.ToUserResponse(), accessToken);
     }
 
     /// <summary>
@@ -64,7 +68,9 @@ public class AuthService(
             return Errors.InvalidCredentials;
         }
 
-        return AuthResponses.Login(existingUser.ToUserResponse(), "Token");
+        var accessToken = tokenProvider.GenerateAccessToken(existingUser.ToUserResponse());
+
+        return AuthResponses.Login(existingUser.ToUserResponse(), accessToken);
     }
 
     /// <summary>
