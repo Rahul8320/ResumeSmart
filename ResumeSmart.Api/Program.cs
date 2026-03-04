@@ -1,3 +1,5 @@
+using DevOne.Security.Cryptography.BCrypt;
+using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
 using ResumeSmart.Api.Configs;
 using ResumeSmart.Api.DB;
@@ -18,6 +20,7 @@ builder.Services.AddSingleton<IMongoDatabase>(_ =>
 });
 
 builder.Services.AddSingleton<MongoDbContext>();
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
@@ -31,7 +34,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     var dbContext = app.Services.GetService<MongoDbContext>();
-    dbContext?.EnsureIndexes();
+    dbContext?.EnsureIndexesAsync();
 }
 
 app.UseSerilogRequestLogging();
