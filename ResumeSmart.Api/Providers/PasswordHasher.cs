@@ -1,7 +1,7 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
-using ResumeSmart.Api.Services.Interfaces;
+using ResumeSmart.Api.Providers.Interfaces;
 
-namespace ResumeSmart.Api.Services;
+namespace ResumeSmart.Api.Providers;
 
 /// <summary>
 /// Implementation of IPasswordHasher interface using BCrypt 

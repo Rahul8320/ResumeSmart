@@ -1,4 +1,4 @@
-﻿namespace ResumeSmart.Api.Services.Interfaces;
+﻿namespace ResumeSmart.Api.Providers.Interfaces;
 
 /// <summary>
 /// Represent password hasher interface
