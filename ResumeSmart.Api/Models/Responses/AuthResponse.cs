@@ -19,8 +19,19 @@ public static class AuthResponses
     /// <param name="user">User data</param>
     /// <param name="token">Auth token</param>
     /// <returns>Returns an instance of auth response</returns>
-    public static AuthResponse UserRegister(UserResponse user, string token)  => new AuthResponse(
+    public static AuthResponse UserRegister(UserResponse user, string token) => new(
         Message: "User successfully registered",
+        User: user,
+        Token: token);
+
+    /// <summary>
+    /// Login response
+    /// </summary>
+    /// <param name="user">User data</param>
+    /// <param name="token">Auth token</param>
+    /// <returns>returns an instance of auth response</returns>
+    public static AuthResponse Login(UserResponse user, string token) => new(
+        Message: "Login successful",
         User: user,
         Token: token);
 }

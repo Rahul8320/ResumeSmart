@@ -15,21 +15,23 @@ public class MongoDbContext(IMongoDatabase database, ILogger<MongoDbContext> log
     /// Holds users collection 
     /// </summary>
     public IMongoCollection<User> Users => database.GetCollection<User>(DbConstents.UserCollection);
-    
+
     /// <summary>
     /// Creates required indexes in database
     /// </summary>
-    public void EnsureIndexes()
+    public async Task EnsureIndexesAsync()
     {
         var userCollection = database.GetCollection<User>(DbConstents.UserCollection);
 
+        var collation = new Collation(locale: "en", strength: CollationStrength.Secondary);
+
         var indexKeys = Builders<User>.IndexKeys.Ascending(user => user.Email);
-        var indexOptions = new CreateIndexOptions { Unique = true };
+        var indexOptions = new CreateIndexOptions { Unique = true, Collation = collation };
         var indexModel = new CreateIndexModel<User>(indexKeys, indexOptions);
 
         try
         {
-            userCollection.Indexes.CreateOne(indexModel);
+            await userCollection.Indexes.CreateOneAsync(indexModel);
             logger.LogInformation("Created Indexes for {collection}", DbConstents.UserCollection);
         }
         catch (MongoCommandException ex)
